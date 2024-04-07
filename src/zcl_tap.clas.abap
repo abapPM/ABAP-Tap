@@ -768,11 +768,15 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD snap_begin.
+    ASSERT snapshot IS BOUND.
+
     snapshot->begin( id = id text = description ).
   ENDMETHOD.
 
 
   METHOD snap_end.
+    ASSERT snapshot IS BOUND.
+
     IF options-snapshot = abap_true.
       " Create/update snapshot
       snapshot->end( ).
@@ -796,6 +800,8 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD snap_write.
+    ASSERT snapshot IS BOUND.
+
     snapshot->write( line = line list = list ).
   ENDMETHOD.
 
@@ -836,6 +842,8 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD test_end.
+    ASSERT subtest-tap IS BOUND.
+
     LOOP AT subtest-tap->testdoc ASSIGNING FIELD-SYMBOL(<line>).
       APPEND |    { <line> }| TO testdoc. " indent 4
     ENDLOOP.
