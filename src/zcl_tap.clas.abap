@@ -9,7 +9,7 @@ CLASS zcl_tap DEFINITION
   PUBLIC SECTION.
 
     CONSTANTS:
-      version     TYPE string VALUE '1.0.0',
+      version     TYPE string VALUE '1.0.0' ##NEEDED,
       tap_version TYPE string VALUE 'TAP version 14' ##NO_TEXT.
 
     DATA testdoc TYPE string_table READ-ONLY.
@@ -411,14 +411,27 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD comment.
+
+    DATA warning TYPE REF TO if_aunit_info_warning.
+
     IF options-logging = abap_true.
       APPEND |# { msg }| TO testdoc.
     ELSE.
       " LOG is an enhancement to add comments to unit test output (ZTAP_INFO)
-      DATA(warning) = cl_aunit_warning_c=>log( msg = msg ).
-      cl_aunit_failure_handler=>raise_warning( warning ).
+      TRY.
+          CALL METHOD cl_aunit_warning_c=>('log')
+            EXPORTING
+              msg    = msg
+            RECEIVING
+              result = warning.
+
+          cl_aunit_failure_handler=>raise_warning( warning ).
+        CATCH cx_root ##NO_HANDLER.
+      ENDTRY.
     ENDIF.
+
     result = me.
+
   ENDMETHOD.
 
 
@@ -439,7 +452,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD contains.
     ASSIGN act->* TO FIELD-SYMBOL(<act>).
-    ASSERT sy-subrc = 0.
+    ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_table_contains(
       table = <act>
@@ -452,7 +465,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD cp.
     ASSIGN act->* TO FIELD-SYMBOL(<act>).
-    ASSERT sy-subrc = 0.
+    ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_char_cp(
       act = <act>
@@ -465,7 +478,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD cs.
     ASSIGN act->* TO FIELD-SYMBOL(<act>).
-    ASSERT sy-subrc = 0.
+    ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_true(
       act = xsdbool( <act> CS exp )
@@ -477,12 +490,16 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD differs.
     ASSIGN act->* TO FIELD-SYMBOL(<act>).
-    ASSERT sy-subrc = 0.
+    ASSERT <act> IS ASSIGNED.
 
-    cl_abap_unit_assert=>assert_differs(
-      act = <act>
-      exp = exp
-      msg = msg ).
+    TRY.
+        cl_abap_unit_assert=>assert_differs(
+          act = <act>
+          exp = exp
+          msg = msg ).
+      CATCH cx_sy_dyn_call_illegal_type.
+        " Different types means pass the test!
+    ENDTRY.
 
     result = me.
   ENDMETHOD.
@@ -506,7 +523,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD equals.
     ASSIGN act->* TO FIELD-SYMBOL(<act>).
-    ASSERT sy-subrc = 0.
+    ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_equals(
       act = <act>
@@ -519,7 +536,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD equals_float.
     ASSIGN act->* TO FIELD-SYMBOL(<act>).
-    ASSERT sy-subrc = 0.
+    ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_equals_float(
       act  = <act>
@@ -538,7 +555,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD error.
     ASSIGN act->* TO FIELD-SYMBOL(<act>).
-    ASSERT sy-subrc = 0.
+    ASSERT <act> IS ASSIGNED.
 
     IF <act> IS INSTANCE OF cx_root.
       cl_abap_unit_assert=>fail( msg = msg ).
@@ -566,7 +583,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD false.
     ASSIGN act->* TO FIELD-SYMBOL(<act>).
-    ASSERT sy-subrc = 0.
+    ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_false(
       act = <act>
@@ -588,7 +605,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD initial.
     ASSIGN act->* TO FIELD-SYMBOL(<act>).
-    ASSERT sy-subrc = 0.
+    ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_initial(
       act = <act>
@@ -630,7 +647,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD matches.
     ASSIGN act->* TO FIELD-SYMBOL(<act>).
-    ASSERT sy-subrc = 0.
+    ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_text_matches(
       text    = <act>
@@ -657,7 +674,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD not_contains.
     ASSIGN act->* TO FIELD-SYMBOL(<act>).
-    ASSERT sy-subrc = 0.
+    ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_table_not_contains(
       table = <act>
@@ -670,7 +687,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD not_initial.
     ASSIGN act->* TO FIELD-SYMBOL(<act>).
-    ASSERT sy-subrc = 0.
+    ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_not_initial(
       act = <act>
@@ -687,7 +704,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD np.
     ASSIGN act->* TO FIELD-SYMBOL(<act>).
-    ASSERT sy-subrc = 0.
+    ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_char_np(
       act = <act>
@@ -700,7 +717,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD ns.
     ASSIGN act->* TO FIELD-SYMBOL(<act>).
-    ASSERT sy-subrc = 0.
+    ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_true(
       act = xsdbool( <act> NS exp )
@@ -749,7 +766,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD return_code.
     ASSIGN act->* TO FIELD-SYMBOL(<act>).
-    ASSERT sy-subrc = 0.
+    ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_return_code(
       act = <act>
@@ -872,7 +889,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD true.
     ASSIGN act->* TO FIELD-SYMBOL(<act>).
-    ASSERT sy-subrc = 0.
+    ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_true(
       act = <act>
