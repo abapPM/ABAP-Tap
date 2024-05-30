@@ -47,6 +47,7 @@ CLASS ltcl_tap DEFINITION FOR TESTING RISK LEVEL HARMLESS
       setup,
       actual FOR TESTING,
       equals FOR TESTING,
+      differs FOR TESTING,
       snap FOR TESTING.
 
 ENDCLASS.
@@ -58,6 +59,11 @@ CLASS ltcl_tap IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD actual.
+
+    FIELD-SYMBOLS:
+      <any>     TYPE any,
+      <any_tab> TYPE ANY TABLE.
+
     " Literals
     cl_abap_unit_assert=>assert_bound( cut->_( 123 ) ).
     cl_abap_unit_assert=>assert_bound( cut->_( 'abc' ) ).
@@ -74,9 +80,21 @@ CLASS ltcl_tap IMPLEMENTATION.
     cl_abap_unit_assert=>assert_bound( cut->_( xstr ) ).
     cl_abap_unit_assert=>assert_bound( cut->_( str_flat ) ).
     cl_abap_unit_assert=>assert_bound( cut->_( tab ) ).
+
+    " Field Symbols
+    ASSIGN i TO <any>.
+    cl_abap_unit_assert=>assert_bound( cut->_( <any> ) ).
+    ASSIGN tab TO <any_tab>.
+    cl_abap_unit_assert=>assert_bound( cut->_( <any_tab> ) ).
+
   ENDMETHOD.
 
   METHOD equals.
+
+    FIELD-SYMBOLS:
+      <any>     TYPE any,
+      <any_tab> TYPE ANY TABLE.
+
     " Literals
     cl_abap_unit_assert=>assert_bound( cut->_( 123 )->equals( 123 ) ).
     cl_abap_unit_assert=>assert_bound( cut->_( 'abc' )->equals( 'abc' ) ).
@@ -95,11 +113,56 @@ CLASS ltcl_tap IMPLEMENTATION.
     str_flat-f2 = 789.
     INSERT str INTO TABLE tab.
 
-    cl_abap_unit_assert=>assert_bound( cut->_( i )->equals( i ) ).
-    cl_abap_unit_assert=>assert_bound( cut->_( str )->equals( str ) ).
+    cl_abap_unit_assert=>assert_bound( cut->_( i )->equals( 456 ) ).
+    cl_abap_unit_assert=>assert_bound( cut->_( str )->equals( 'tappy' ) ).
     cl_abap_unit_assert=>assert_bound( cut->_( xstr )->equals( xstr ) ).
     cl_abap_unit_assert=>assert_bound( cut->_( str_flat )->equals( str_flat ) ).
     cl_abap_unit_assert=>assert_bound( cut->_( tab )->equals( tab ) ).
+
+    " Field Symbols
+    ASSIGN i TO <any>.
+    cl_abap_unit_assert=>assert_bound( cut->_( <any> )->equals( i ) ).
+    ASSIGN tab TO <any_tab>.
+    cl_abap_unit_assert=>assert_bound( cut->_( <any_tab> )->equals( tab ) ).
+
+  ENDMETHOD.
+
+  METHOD differs.
+
+    FIELD-SYMBOLS:
+      <any>     TYPE any,
+      <any_tab> TYPE ANY TABLE.
+
+    " Literals
+    cl_abap_unit_assert=>assert_bound( cut->_( 123 )->differs( 12 ) ).
+    cl_abap_unit_assert=>assert_bound( cut->_( 'abc' )->differs( 'ab' ) ).
+    cl_abap_unit_assert=>assert_bound( cut->_( `Test` )->differs( `Test ` ) ).
+
+    " Constants
+    cl_abap_unit_assert=>assert_bound( cut->_( abap_true )->differs( '' ) ).
+    cl_abap_unit_assert=>assert_bound( cut->_( const-i )->differs( 0 ) ).
+    cl_abap_unit_assert=>assert_bound( cut->_( const-str )->differs( 'Test' ) ).
+
+    " Variables
+    i = 456.
+    str = 'tappy'.
+    xstr = const-xstr.
+    str_flat-f1 = 'Z'.
+    str_flat-f2 = 789.
+    INSERT str INTO TABLE tab.
+
+    cl_abap_unit_assert=>assert_bound( cut->_( i )->differs( 26 ) ).
+    cl_abap_unit_assert=>assert_bound( cut->_( str )->differs( 'tap' ) ).
+    cl_abap_unit_assert=>assert_bound( cut->_( xstr )->differs( xstr && const-x ) ).
+    cl_abap_unit_assert=>assert_bound( cut->_( str_flat )->differs( 'Z789' ) ).
+    cl_abap_unit_assert=>assert_bound( cut->_( tab )->differs( tab_hashed ) ).
+
+    " Field Symbols
+    ASSIGN i TO <any>.
+    cl_abap_unit_assert=>assert_bound( cut->_( <any> )->differs( 11 ) ).
+    ASSIGN tab TO <any_tab>.
+    cl_abap_unit_assert=>assert_bound( cut->_( <any_tab> )->differs( tab ) ).
+
   ENDMETHOD.
 
   METHOD snap.
