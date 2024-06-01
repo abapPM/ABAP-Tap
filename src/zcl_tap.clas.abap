@@ -2,9 +2,14 @@ CLASS zcl_tap DEFINITION
   PUBLIC
   CREATE PUBLIC.
 
+************************************************************************
 * TAP for ABAP
-* http://testanything.org/tap-version-14-specification.html
-* (c) 2022 Marc F. Bernard
+*
+* https://testanything.org/tap-version-14-specification.html
+*
+* Copyright 2024 apm.to Inc. <https://apm.to>
+* SPDX-License-Identifier: MIT
+************************************************************************
 
   PUBLIC SECTION.
 
