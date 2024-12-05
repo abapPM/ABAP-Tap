@@ -17,6 +17,55 @@ CLASS zcl_tap DEFINITION
       version     TYPE string VALUE '1.0.0' ##NEEDED,
       tap_version TYPE string VALUE 'TAP version 14' ##NO_TEXT.
 
+    CONSTANTS:
+      BEGIN OF data_kind,
+        class      TYPE string VALUE 'CLASS',
+        elementary TYPE string VALUE 'ELEMENTARY',
+        interface  TYPE string VALUE 'INTERFACE',
+        reference  TYPE string VALUE 'REFERENCE',
+        structure  TYPE string VALUE 'STRUCTURE',
+        table      TYPE string VALUE 'TABLE',
+      END OF data_kind.
+
+    CONSTANTS:
+      BEGIN OF data_type,
+        any              TYPE string VALUE 'ANY',
+        char             TYPE string VALUE 'CHAR', "c
+        class            TYPE string VALUE 'CLASS',
+        clike            TYPE string VALUE 'CLIKE',
+        csequence        TYPE string VALUE 'CSEQUENCE',
+        data             TYPE string VALUE 'DATA',
+        date             TYPE string VALUE 'DATE', "d
+        decfloat         TYPE string VALUE 'DECFLOAT',
+        decfloat16       TYPE string VALUE 'DECFLOAT16',
+        decfloat34       TYPE string VALUE 'DECFLOAT34',
+        ref_to_data      TYPE string VALUE 'DREF',
+        float            TYPE string VALUE 'FLOAT', "f
+        hex              TYPE string VALUE 'HEX', "f
+        int              TYPE string VALUE 'INT', "i
+        int1             TYPE string VALUE 'INT1',
+        int8             TYPE string VALUE 'INT8',
+        int2             TYPE string VALUE 'INT2',
+        interface        TYPE string VALUE 'INTERFACE',
+        ref_to_interface TYPE string VALUE 'IREF',
+        num              TYPE string VALUE 'NUM', "n
+        numeric          TYPE string VALUE 'NUMERIC',
+        ref_to_object    TYPE string VALUE 'OREF',
+        packed           TYPE string VALUE 'PACKED', "p
+        simple           TYPE string VALUE 'SIMPLE',
+        string           TYPE string VALUE 'STRING',
+        struct1          TYPE string VALUE 'STRUCT1',
+        struct2          TYPE string VALUE 'STRUCT2',
+        table            TYPE string VALUE 'TABLE',
+        time             TYPE string VALUE 'TIME', "t
+        utclong          TYPE string VALUE 'UTCLONG',
+        w                TYPE string VALUE 'W',
+        xsequence        TYPE string VALUE 'XSEQUENCE',
+        xstring          TYPE string VALUE 'XSTRING',
+        bref             TYPE string VALUE 'BREF',
+        enum             TYPE string VALUE 'ENUM',
+      END OF data_type.
+
     DATA testdoc TYPE string_table READ-ONLY.
 
     DATA:
@@ -363,7 +412,6 @@ CLASS zcl_tap DEFINITION
     METHODS snap_end
       IMPORTING
         msg TYPE csequence OPTIONAL.
-
   PROTECTED SECTION.
   PRIVATE SECTION.
 
@@ -625,17 +673,17 @@ CLASS zcl_tap IMPLEMENTATION.
     ASSERT type_descr IS BOUND.
 
     CASE to_upper( exp ).
-      WHEN 'CLAS' OR 'CLASS'.
+      WHEN data_kind-class OR 'CLAS'.
         DATA(exp_kind) = cl_abap_typedescr=>kind_class.
-      WHEN 'ELEM' OR 'ELEMENTARY'.
+      WHEN data_kind-elementary OR 'ELEM'.
         exp_kind = cl_abap_typedescr=>kind_elem.
-      WHEN 'INTF' OR 'INTERFACE'.
+      WHEN data_kind-interface OR 'INTF'.
         exp_kind = cl_abap_typedescr=>kind_intf.
-      WHEN 'REF' OR 'REFERENCE'.
+      WHEN data_kind-reference OR 'REF'.
         exp_kind = cl_abap_typedescr=>kind_ref.
-      WHEN 'STRU' OR 'STRUCTURE'.
+      WHEN data_kind-structure OR 'STRU' OR 'STRUCT'.
         exp_kind = cl_abap_typedescr=>kind_struct.
-      WHEN 'TABL' OR 'TABLE'.
+      WHEN data_kind-table OR 'TAB' OR 'TABL'.
         exp_kind = cl_abap_typedescr=>kind_table.
       WHEN OTHERS.
         exp_kind = exp.
@@ -909,84 +957,88 @@ CLASS zcl_tap IMPLEMENTATION.
     ASSERT type_descr IS BOUND.
 
     CASE to_upper( exp ).
-      WHEN 'ANY'.
+      WHEN data_type-any.
         DATA(exp_type) = cl_abap_typedescr=>typekind_any.
-      WHEN 'C' OR 'CHAR'.
+      WHEN data_type-char OR 'C' OR 'CHA'.
         exp_type = cl_abap_typedescr=>typekind_char.
-      WHEN 'CLAS' OR 'CLASS'.
+      WHEN data_type-class OR 'CLAS'.
         exp_type = cl_abap_typedescr=>typekind_class.
-      WHEN 'CLIKE'.
+      WHEN data_type-clike.
         "exp_type = cl_abap_typedescr=>typekind_clike
         exp_type = cl_abap_typedescr=>typekind_char && cl_abap_typedescr=>typekind_num
                 && cl_abap_typedescr=>typekind_string && cl_abap_typedescr=>typekind_date
                 && cl_abap_typedescr=>typekind_time.
-      WHEN 'CSEQUENCE'.
+      WHEN data_type-csequence OR 'CSEQ'.
         "exp_type = cl_abap_typedescr=>typekind_csequence
         exp_type = cl_abap_typedescr=>typekind_char && cl_abap_typedescr=>typekind_string.
-      WHEN 'DATA'.
+      WHEN data_type-data.
         "exp_type = cl_abap_typedescr=>typekind_data.
         exp_type = cl_abap_typedescr=>typekind_any.
-      WHEN 'D' OR 'DATE' OR 'DATS' OR 'DATN'.
+      WHEN data_type-data OR 'D' OR 'DAT' OR 'DATS' OR 'DATN'.
         exp_type = cl_abap_typedescr=>typekind_date.
-      WHEN 'DECFLOAT'.
+      WHEN data_type-decfloat.
         "exp_type = cl_abap_typedescr=>typekind_decfloat
         exp_type = cl_abap_typedescr=>typekind_decfloat16 && cl_abap_typedescr=>typekind_decfloat34.
-      WHEN 'DECFLOAT16'.
+      WHEN data_type-decfloat16 OR 'DEC16'.
         exp_type = cl_abap_typedescr=>typekind_decfloat16.
-      WHEN 'DECFLOAT34'.
+      WHEN data_type-decfloat34 OR 'DEC34'.
         exp_type = cl_abap_typedescr=>typekind_decfloat34.
-      WHEN 'DREF'.
+      WHEN data_type-ref_to_data.
         exp_type = cl_abap_typedescr=>typekind_dref.
-      WHEN 'F' OR 'FLOAT' OR 'FLTP'.
+      WHEN data_type-float OR 'F' OR 'FLTP'.
         exp_type = cl_abap_typedescr=>typekind_float.
-      WHEN 'X' OR 'HEX' OR 'RAW'.
+      WHEN data_type-hex OR 'X' OR 'RAW'.
         exp_type = cl_abap_typedescr=>typekind_hex.
-      WHEN 'B' OR 'I1' OR 'INT1'.
+      WHEN data_type-int1 OR 'B' OR 'I1'.
         exp_type = cl_abap_typedescr=>typekind_int1.
-      WHEN 'S' OR 'I2' OR 'INT2'.
+      WHEN data_type-int2 OR 'S' OR 'I2'.
         exp_type = cl_abap_typedescr=>typekind_int2.
-      WHEN 'I' OR 'I4' OR 'INT' OR 'INT4' OR 'INTEGER'.
+      WHEN data_type-int OR 'I' OR 'I4' OR 'INT4' OR 'INTEGER'.
         exp_type = cl_abap_typedescr=>typekind_int.
-      WHEN 'I8' OR 'INT8'.
+      WHEN data_type-int8 OR 'I8'.
         exp_type = cl_abap_typedescr=>typekind_int8.
-      WHEN 'INTF' OR 'INTERFACE'.
+      WHEN data_type-interface OR 'INTF'.
         exp_type = cl_abap_typedescr=>typekind_intf.
-      WHEN 'IREF'.
+      WHEN data_type-ref_to_interface.
         exp_type = cl_abap_typedescr=>typekind_iref.
-      WHEN 'N' OR 'NUMC'.
+      WHEN data_type-num OR 'N' OR 'NUMC'.
         exp_type = cl_abap_typedescr=>typekind_num.
-      WHEN 'NUMERIC'.
+      WHEN data_type-numeric.
         "exp_type = cl_abap_typedescr=>typekind_numeric
         exp_type = cl_abap_typedescr=>typekind_int1 && cl_abap_typedescr=>typekind_int2
                 && cl_abap_typedescr=>typekind_int && cl_abap_typedescr=>typekind_int8
                 && cl_abap_typedescr=>typekind_packed && cl_abap_typedescr=>typekind_float
                 && cl_abap_typedescr=>typekind_decfloat16 && cl_abap_typedescr=>typekind_decfloat34.
-      WHEN 'OREF' OR 'OBJ' OR 'OBJECT'.
+      WHEN data_type-ref_to_object OR 'OBJ' OR 'OBJECT'.
         exp_type = cl_abap_typedescr=>typekind_oref.
-      WHEN 'P' OR 'PACKED' OR 'DEC'.
+      WHEN data_type-packed  OR 'P' OR 'DEC'.
         exp_type = cl_abap_typedescr=>typekind_packed.
-      WHEN 'SIMPLE'.
+      WHEN data_type-simple.
         exp_type = cl_abap_typedescr=>typekind_simple.
-      WHEN 'STR' OR 'STRG' OR 'STRING'.
+      WHEN data_type-string OR 'STR' OR 'STRG'.
         exp_type = cl_abap_typedescr=>typekind_string.
-      WHEN 'STRU' OR 'STRUCT'.
+      WHEN 'STRUC' OR 'STRUCT'.
         exp_type = cl_abap_typedescr=>typekind_struct1 && cl_abap_typedescr=>typekind_struct2.
-      WHEN 'TAB' OR 'TABL' OR 'TABLE'.
+      WHEN data_type-struct1.
+        exp_type = cl_abap_typedescr=>typekind_struct1.
+      WHEN data_type-struct2.
+        exp_type = cl_abap_typedescr=>typekind_struct2.
+      WHEN data_type-table OR 'TAB' OR 'TABL'.
         exp_type = cl_abap_typedescr=>typekind_table.
-      WHEN 'T' OR 'TIME' OR 'TIMS' OR 'TIMN'.
+      WHEN data_type-time OR 'T' OR 'TIMS' OR 'TIMN'.
         exp_type = cl_abap_typedescr=>typekind_time.
-      WHEN 'UTC' OR 'UTCLONG'.
+      WHEN data_type-utclong OR 'UTC'.
         exp_type = cl_abap_typedescr=>typekind_utclong.
-      WHEN 'W' OR 'LCHR'.
+      WHEN data_type-w OR 'LCHR'.
         exp_type = cl_abap_typedescr=>typekind_w.
-      WHEN 'XSEQUENCE'.
+      WHEN data_type-xsequence OR 'XSEQ'.
         "exp_type = cl_abap_typedescr=>typekind_xsequence
         exp_type = cl_abap_typedescr=>typekind_hex && cl_abap_typedescr=>typekind_xstring.
-      WHEN 'XSTR' OR 'XSTRING' OR 'RSTR'.
+      WHEN data_type-xstring OR 'XSTR' OR 'RSTR'.
         exp_type = cl_abap_typedescr=>typekind_xstring.
-      WHEN 'BREF'.
+      WHEN data_type-bref.
         exp_type = cl_abap_typedescr=>typekind_bref.
-      WHEN 'ENUM'.
+      WHEN data_type-enum.
         exp_type = cl_abap_typedescr=>typekind_enum.
       WHEN OTHERS.
         exp_type = exp.
