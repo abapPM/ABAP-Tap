@@ -2,6 +2,7 @@ CLASS ltcl_tap DEFINITION FOR TESTING RISK LEVEL HARMLESS
   DURATION SHORT FINAL.
 
   PRIVATE SECTION.
+
     CONSTANTS snap_id TYPE string VALUE 'SNAPSHOT_TEST'.
 
     CONSTANTS:
@@ -39,7 +40,7 @@ CLASS ltcl_tap DEFINITION FOR TESTING RISK LEVEL HARMLESS
         f2 TYPE i,
       END OF str_flat,
       BEGIN OF str_deep,
-        f1 TYPE c,
+        f1 TYPE string,
         f2 LIKE STANDARD TABLE OF str_flat,
       END OF str_deep.
 
@@ -48,6 +49,7 @@ CLASS ltcl_tap DEFINITION FOR TESTING RISK LEVEL HARMLESS
       actual FOR TESTING,
       equals FOR TESTING,
       differs FOR TESTING,
+      index FOR TESTING,
       snap FOR TESTING.
 
 ENDCLASS.
@@ -164,6 +166,21 @@ CLASS ltcl_tap IMPLEMENTATION.
     cl_abap_unit_assert=>assert_bound( cut->_( <any_tab> )->differs( tab ) ).
 
   ENDMETHOD.
+
+  METHOD index.
+    INSERT `1` INTO TABLE tab.
+    INSERT `2` INTO TABLE tab.
+    INSERT `3` INTO TABLE tab.
+
+    LOOP AT tab INTO str.
+      cl_abap_unit_assert=>assert_bound( cut->_( str )->tabix( sy-tabix ) ).
+    ENDLOOP.
+
+    READ TABLE tab INTO str INDEX 2.
+    cl_abap_unit_assert=>assert_bound( cut->_( str )->eq( '2')->tabix( 2 ) ).
+
+  ENDMETHOD.
+
 
   METHOD snap.
     cut->snap_begin( snap_id ).

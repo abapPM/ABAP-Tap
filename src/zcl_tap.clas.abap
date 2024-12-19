@@ -5,10 +5,10 @@ CLASS zcl_tap DEFINITION
 ************************************************************************
 * TAP for ABAP
 *
-* https://testanything.org/tap-version-14-specification.html
-*
 * Copyright 2024 apm.to Inc. <https://apm.to>
 * SPDX-License-Identifier: MIT
+************************************************************************
+* Based on * https://testanything.org/tap-version-14-specification.html
 ************************************************************************
 
   PUBLIC SECTION.
@@ -30,34 +30,34 @@ CLASS zcl_tap DEFINITION
     CONSTANTS:
       BEGIN OF data_type,
         any              TYPE string VALUE 'ANY',
-        char             TYPE string VALUE 'CHAR', "c
+        char             TYPE string VALUE 'CHAR', "c"
         class            TYPE string VALUE 'CLASS',
         clike            TYPE string VALUE 'CLIKE',
         csequence        TYPE string VALUE 'CSEQUENCE',
         data             TYPE string VALUE 'DATA',
-        date             TYPE string VALUE 'DATE', "d
+        date             TYPE string VALUE 'DATE', "d"
         decfloat         TYPE string VALUE 'DECFLOAT',
         decfloat16       TYPE string VALUE 'DECFLOAT16',
         decfloat34       TYPE string VALUE 'DECFLOAT34',
         ref_to_data      TYPE string VALUE 'DREF',
-        float            TYPE string VALUE 'FLOAT', "f
-        hex              TYPE string VALUE 'HEX', "f
-        int              TYPE string VALUE 'INT', "i
+        float            TYPE string VALUE 'FLOAT', "f"
+        hex              TYPE string VALUE 'HEX', "f"
+        int              TYPE string VALUE 'INT', "i"
         int1             TYPE string VALUE 'INT1',
         int8             TYPE string VALUE 'INT8',
         int2             TYPE string VALUE 'INT2',
         interface        TYPE string VALUE 'INTERFACE',
         ref_to_interface TYPE string VALUE 'IREF',
-        num              TYPE string VALUE 'NUM', "n
+        num              TYPE string VALUE 'NUM', "n"
         numeric          TYPE string VALUE 'NUMERIC',
         ref_to_object    TYPE string VALUE 'OREF',
-        packed           TYPE string VALUE 'PACKED', "p
+        packed           TYPE string VALUE 'PACKED', "p"
         simple           TYPE string VALUE 'SIMPLE',
         string           TYPE string VALUE 'STRING',
         struct1          TYPE string VALUE 'STRUCT1',
         struct2          TYPE string VALUE 'STRUCT2',
         table            TYPE string VALUE 'TABLE',
-        time             TYPE string VALUE 'TIME', "t
+        time             TYPE string VALUE 'TIME', "t"
         utclong          TYPE string VALUE 'UTCLONG',
         w                TYPE string VALUE 'W',
         xsequence        TYPE string VALUE 'XSEQUENCE',
@@ -160,13 +160,19 @@ CLASS zcl_tap DEFINITION
 
     " Actual
 
-    METHODS _
+    METHODS act
       IMPORTING
-        t             TYPE any
+        data          TYPE any OPTIONAL
       RETURNING
         VALUE(result) TYPE REF TO zcl_tap.
 
-    " Asserts
+    METHODS _ " same as act
+      IMPORTING
+        data          TYPE any OPTIONAL
+      RETURNING
+        VALUE(result) TYPE REF TO zcl_tap.
+
+    " Assertions
 
     METHODS abort
       IMPORTING
@@ -359,14 +365,21 @@ CLASS zcl_tap DEFINITION
       RETURNING
         VALUE(result) TYPE REF TO zcl_tap.
 
+    METHODS fdpos
+      IMPORTING
+        exp           TYPE sy-fdpos
+        msg           TYPE csequence OPTIONAL
+      RETURNING
+        VALUE(result) TYPE REF TO zcl_tap.
+
     METHODS throws
       IMPORTING
-        t   TYPE any ##NEEDED
-        msg TYPE csequence OPTIONAL.
+        data TYPE any ##NEEDED
+        msg  TYPE csequence OPTIONAL.
 
     METHODS does_not_throw
       IMPORTING
-        t             TYPE any ##NEEDED
+        data          TYPE any ##NEEDED
       RETURNING
         VALUE(result) TYPE REF TO zcl_tap.
 
@@ -412,16 +425,18 @@ CLASS zcl_tap DEFINITION
     METHODS snap_end
       IMPORTING
         msg TYPE csequence OPTIONAL.
+
   PROTECTED SECTION.
   PRIVATE SECTION.
 
     DATA _subrc TYPE sy-subrc.
     DATA _index TYPE sy-index.
     DATA _tabix TYPE sy-tabix.
+    DATA _fdpos TYPE sy-fdpos.
 
-    DATA act TYPE REF TO data.
+    DATA _act TYPE REF TO data.
 
-    DATA snapshot TYPE REF TO lcl_snapshot.
+    DATA _snapshot TYPE REF TO lcl_snapshot.
 
     METHODS snap_init
       IMPORTING
@@ -448,6 +463,20 @@ CLASS zcl_tap IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD act.
+    _subrc = sy-subrc ##NEEDED.
+    _index = sy-index ##NEEDED.
+    _tabix = sy-tabix ##NEEDED.
+    _fdpos = sy-fdpos ##NEEDED.
+
+    IF data IS SUPPLIED.
+      GET REFERENCE OF data INTO _act.
+    ENDIF.
+
+    result = me.
+  ENDMETHOD.
+
+
   METHOD bailout.
     APPEND |Bail out! { esc( reason ) }| TO testdoc ##NO_TEXT.
     abort( reason ).
@@ -456,7 +485,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD bound.
     cl_abap_unit_assert=>assert_bound(
-      act = act
+      act = _act
       msg = msg ).
 
     result = me.
@@ -504,7 +533,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD contains.
-    ASSIGN act->* TO FIELD-SYMBOL(<act>).
+    ASSIGN _act->* TO FIELD-SYMBOL(<act>).
     ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_table_contains(
@@ -517,7 +546,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD cp.
-    ASSIGN act->* TO FIELD-SYMBOL(<act>).
+    ASSIGN _act->* TO FIELD-SYMBOL(<act>).
     ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_char_cp(
@@ -530,7 +559,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD cs.
-    ASSIGN act->* TO FIELD-SYMBOL(<act>).
+    ASSIGN _act->* TO FIELD-SYMBOL(<act>).
     ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_true(
@@ -542,7 +571,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD differs.
-    ASSIGN act->* TO FIELD-SYMBOL(<act>).
+    ASSIGN _act->* TO FIELD-SYMBOL(<act>).
     ASSERT <act> IS ASSIGNED.
 
     TRY.
@@ -560,7 +589,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD does_not_throw.
     " If we get here, the call didn't raise an exception. Therefore, pass the test
-    result = _( t = t ).
+    result = _( data ).
   ENDMETHOD.
 
 
@@ -575,7 +604,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD equals.
-    ASSIGN act->* TO FIELD-SYMBOL(<act>).
+    ASSIGN _act->* TO FIELD-SYMBOL(<act>).
     ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_equals(
@@ -588,7 +617,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD equals_float.
-    ASSIGN act->* TO FIELD-SYMBOL(<act>).
+    ASSIGN _act->* TO FIELD-SYMBOL(<act>).
     ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_equals_float(
@@ -607,7 +636,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD error.
-    ASSIGN act->* TO FIELD-SYMBOL(<act>).
+    ASSIGN _act->* TO FIELD-SYMBOL(<act>).
     ASSERT <act> IS ASSIGNED.
 
     IF <act> IS INSTANCE OF cx_root.
@@ -635,11 +664,21 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD false.
-    ASSIGN act->* TO FIELD-SYMBOL(<act>).
+    ASSIGN _act->* TO FIELD-SYMBOL(<act>).
     ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_false(
       act = <act>
+      msg = msg ).
+
+    result = me.
+  ENDMETHOD.
+
+
+  METHOD fdpos.
+    cl_abap_unit_assert=>assert_equals(
+      act = _fdpos
+      exp = exp
       msg = msg ).
 
     result = me.
@@ -657,7 +696,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD initial.
-    ASSIGN act->* TO FIELD-SYMBOL(<act>).
+    ASSIGN _act->* TO FIELD-SYMBOL(<act>).
     ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_initial(
@@ -669,7 +708,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD kind.
-    DATA(type_descr) = cl_abap_typedescr=>describe_by_data_ref( act ).
+    DATA(type_descr) = cl_abap_typedescr=>describe_by_data_ref( _act ).
     ASSERT type_descr IS BOUND.
 
     CASE to_upper( exp ).
@@ -699,7 +738,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD matches.
-    ASSIGN act->* TO FIELD-SYMBOL(<act>).
+    ASSIGN _act->* TO FIELD-SYMBOL(<act>).
     ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_text_matches(
@@ -718,7 +757,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
   METHOD not_bound.
     cl_abap_unit_assert=>assert_not_bound(
-      act = act
+      act = _act
       msg = msg ).
 
     result = me.
@@ -726,7 +765,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD not_contains.
-    ASSIGN act->* TO FIELD-SYMBOL(<act>).
+    ASSIGN _act->* TO FIELD-SYMBOL(<act>).
     ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_table_not_contains(
@@ -739,7 +778,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD not_initial.
-    ASSIGN act->* TO FIELD-SYMBOL(<act>).
+    ASSIGN _act->* TO FIELD-SYMBOL(<act>).
     ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_not_initial(
@@ -756,7 +795,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD np.
-    ASSIGN act->* TO FIELD-SYMBOL(<act>).
+    ASSIGN _act->* TO FIELD-SYMBOL(<act>).
     ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_char_np(
@@ -769,7 +808,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD ns.
-    ASSIGN act->* TO FIELD-SYMBOL(<act>).
+    ASSIGN _act->* TO FIELD-SYMBOL(<act>).
     ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_true(
@@ -818,7 +857,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD return_code.
-    ASSIGN act->* TO FIELD-SYMBOL(<act>).
+    ASSIGN _act->* TO FIELD-SYMBOL(<act>).
     ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_return_code(
@@ -838,30 +877,30 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD snap_begin.
-    ASSERT snapshot IS BOUND.
+    ASSERT _snapshot IS BOUND.
 
-    snapshot->begin( id = id text = description ).
+    _snapshot->begin( id = id text = description ).
   ENDMETHOD.
 
 
   METHOD snap_end.
-    ASSERT snapshot IS BOUND.
+    ASSERT _snapshot IS BOUND.
 
     IF options-snapshot = abap_true.
       " Create/update snapshot
-      snapshot->end( ).
+      _snapshot->end( ).
     ELSE.
       " Compare to snapshot
       cl_abap_unit_assert=>assert_equals(
-        act = snapshot->actual( )
-        exp = snapshot->expected( )
+        act = _snapshot->actual( )
+        exp = _snapshot->expected( )
         msg = msg ).
     ENDIF.
   ENDMETHOD.
 
 
   METHOD snap_init.
-    snapshot = NEW lcl_snapshot(
+    _snapshot = NEW lcl_snapshot(
       include = include
       package = package
       title   = title
@@ -870,9 +909,9 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD snap_write.
-    ASSERT snapshot IS BOUND.
+    ASSERT _snapshot IS BOUND.
 
-    snapshot->write( line = line list = list ).
+    _snapshot->write( line = line list = list ).
   ENDMETHOD.
 
 
@@ -941,7 +980,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD true.
-    ASSIGN act->* TO FIELD-SYMBOL(<act>).
+    ASSIGN _act->* TO FIELD-SYMBOL(<act>).
     ASSERT <act> IS ASSIGNED.
 
     cl_abap_unit_assert=>assert_true(
@@ -953,7 +992,7 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD type.
-    DATA(type_descr) = cl_abap_typedescr=>describe_by_data_ref( act ).
+    DATA(type_descr) = cl_abap_typedescr=>describe_by_data_ref( _act ).
     ASSERT type_descr IS BOUND.
 
     CASE to_upper( exp ).
@@ -1055,12 +1094,6 @@ CLASS zcl_tap IMPLEMENTATION.
 
 
   METHOD _.
-    _subrc = sy-subrc ##NEEDED.
-    _index = sy-index ##NEEDED.
-    _tabix = sy-tabix ##NEEDED.
-
-    GET REFERENCE OF t INTO act.
-
-    result = me.
+    result = act( data ).
   ENDMETHOD.
 ENDCLASS.
