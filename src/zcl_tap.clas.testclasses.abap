@@ -22,26 +22,26 @@ CLASS ltcl_tap DEFINITION FOR TESTING RISK LEVEL HARMLESS
 
     DATA:
       i          TYPE i,
-      i8         TYPE int8,
-      c          TYPE c LENGTH 3,
-      n          TYPE n LENGTH 5,
+      i8         TYPE int8   ##NEEDED,
+      c          TYPE c LENGTH 3 ##NEEDED,
+      n          TYPE n LENGTH 5 ##NEEDED,
       str        TYPE string,
-      d          TYPE d,
-      t          TYPE t,
-      x          TYPE x LENGTH 4,
+      d          TYPE d ##NEEDED,
+      t          TYPE t ##NEEDED,
+      x          TYPE x LENGTH 4 ##NEEDED,
       xstr       TYPE xstring,
-      dref       TYPE REF TO data,
-      oref       TYPE REF TO object,
-      tab        TYPE STANDARD TABLE OF string WITH DEFAULT KEY,
-      tab_sorted TYPE SORTED TABLE OF string WITH UNIQUE DEFAULT KEY,
-      tab_hashed TYPE HASHED TABLE OF string WITH UNIQUE DEFAULT KEY,
+      dref       TYPE REF TO data ##NEEDED,
+      oref       TYPE REF TO object ##NEEDED,
+      tab        TYPE STANDARD TABLE OF string WITH KEY table_line,
+      tab_sorted TYPE SORTED TABLE OF string WITH UNIQUE KEY table_line ##NEEDED,
+      tab_hashed TYPE HASHED TABLE OF string WITH UNIQUE KEY table_line,
       BEGIN OF str_flat,
         f1 TYPE c,
         f2 TYPE i,
       END OF str_flat,
-      BEGIN OF str_deep,
+      BEGIN OF str_deep ##NEEDED,
         f1 TYPE string,
-        f2 LIKE STANDARD TABLE OF str_flat,
+        f2 LIKE STANDARD TABLE OF str_flat WITH KEY table_line,
       END OF str_deep.
 
     METHODS:
@@ -62,9 +62,7 @@ CLASS ltcl_tap IMPLEMENTATION.
 
   METHOD actual.
 
-    FIELD-SYMBOLS:
-      <any>     TYPE any,
-      <any_tab> TYPE ANY TABLE.
+    FIELD-SYMBOLS <any_tab> TYPE ANY TABLE.
 
     " Literals
     cl_abap_unit_assert=>assert_bound( cut->_( 123 ) ).
@@ -84,7 +82,7 @@ CLASS ltcl_tap IMPLEMENTATION.
     cl_abap_unit_assert=>assert_bound( cut->_( tab ) ).
 
     " Field Symbols
-    ASSIGN i TO <any>.
+    ASSIGN i TO FIELD-SYMBOL(<any>).
     cl_abap_unit_assert=>assert_bound( cut->_( <any> ) ).
     ASSIGN tab TO <any_tab>.
     cl_abap_unit_assert=>assert_bound( cut->_( <any_tab> ) ).
@@ -93,9 +91,7 @@ CLASS ltcl_tap IMPLEMENTATION.
 
   METHOD equals.
 
-    FIELD-SYMBOLS:
-      <any>     TYPE any,
-      <any_tab> TYPE ANY TABLE.
+    FIELD-SYMBOLS <any_tab> TYPE ANY TABLE.
 
     " Literals
     cl_abap_unit_assert=>assert_bound( cut->_( 123 )->equals( 123 ) ).
@@ -122,7 +118,7 @@ CLASS ltcl_tap IMPLEMENTATION.
     cl_abap_unit_assert=>assert_bound( cut->_( tab )->equals( tab ) ).
 
     " Field Symbols
-    ASSIGN i TO <any>.
+    ASSIGN i TO FIELD-SYMBOL(<any>).
     cl_abap_unit_assert=>assert_bound( cut->_( <any> )->equals( i ) ).
     ASSIGN tab TO <any_tab>.
     cl_abap_unit_assert=>assert_bound( cut->_( <any_tab> )->equals( tab ) ).
@@ -131,9 +127,7 @@ CLASS ltcl_tap IMPLEMENTATION.
 
   METHOD differs.
 
-    FIELD-SYMBOLS:
-      <any>     TYPE any,
-      <any_tab> TYPE ANY TABLE.
+    FIELD-SYMBOLS <any_tab> TYPE ANY TABLE.
 
     " Literals
     cl_abap_unit_assert=>assert_bound( cut->_( 123 )->differs( 12 ) ).
@@ -160,7 +154,7 @@ CLASS ltcl_tap IMPLEMENTATION.
     cl_abap_unit_assert=>assert_bound( cut->_( tab )->differs( tab_hashed ) ).
 
     " Field Symbols
-    ASSIGN i TO <any>.
+    ASSIGN i TO FIELD-SYMBOL(<any>).
     cl_abap_unit_assert=>assert_bound( cut->_( <any> )->differs( 11 ) ).
     ASSIGN tab TO <any_tab>.
     cl_abap_unit_assert=>assert_bound( cut->_( <any_tab> )->differs( tab ) ).
@@ -168,6 +162,7 @@ CLASS ltcl_tap IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD index.
+
     INSERT `1` INTO TABLE tab.
     INSERT `2` INTO TABLE tab.
     INSERT `3` INTO TABLE tab.
@@ -177,17 +172,20 @@ CLASS ltcl_tap IMPLEMENTATION.
     ENDLOOP.
 
     READ TABLE tab INTO str INDEX 2.
-    cl_abap_unit_assert=>assert_bound( cut->_( str )->eq( '2')->tabix( 2 ) ).
+    cl_abap_unit_assert=>assert_subrc( ).
+    cl_abap_unit_assert=>assert_bound( cut->_( str )->eq( '2' )->tabix( 2 ) ).
 
   ENDMETHOD.
 
 
   METHOD snap.
+
     cut->snap_begin( snap_id ).
     DO 10 TIMES.
       cut->snap_write( |{ sy-index }| ).
     ENDDO.
     cut->snap_end( snap_id ).
+
   ENDMETHOD.
 
 ENDCLASS.
