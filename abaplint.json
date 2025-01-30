@@ -234,7 +234,7 @@
     "remove_descriptions": true,
     "rfc_error_handling": true,
     "select_add_order_by": false,
-    "select_performance": true,
+    "select_performance": false,
     "select_single_full_key": true,
     "selection_screen_naming": true,
     "sequential_blank": true,
@@ -251,7 +251,9 @@
     "strict_sql": false,
     "superclass_final": true,
     "superfluous_value": true,
-    "sy_modification": true,
+    "sy_modification": {
+      "exclude": ["zcl_tap.clas.abap"]
+    },
     "tabl_enhancement_category": true,
     "tables_declared_locally": true,
     "try_without_catch": true,
