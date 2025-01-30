@@ -4,11 +4,6 @@
       "files": "/src/**/*.*",
       "folder": "/deps",
       "url": "https://github.com/abaplint/deps"
-    },
-    {
-      "files": "/src/**/*.*",
-      "folder": "/deps2",
-      "url": "https://github.com/abapPM/ABAP-Error"
     }
   ],
   "global": {
@@ -36,6 +31,7 @@
       "allowed": [
         "CLAS",
         "DEVC",
+        "ENHO",
         "INTF",
         "PROG"
       ]
@@ -70,7 +66,10 @@
     "contains_tab": true,
     "cyclic_oo": true,
     "cyclomatic_complexity": true,
-    "dangerous_statement": true,
+    "dangerous_statement": {
+      "insertReport": false,
+      "deleteReport": false
+    },
     "db_operation_in_loop": true,
     "definitions_top": true,
     "description_empty": true,
@@ -148,7 +147,7 @@
     "message_exists": true,
     "method_implemented_twice": true,
     "method_length": true,
-    "method_overwrites_builtin": true,
+    "method_overwrites_builtin": false,
     "method_parameter_names": false,
     "mix_returning": true,
     "modify_only_own_db_tables": true,
