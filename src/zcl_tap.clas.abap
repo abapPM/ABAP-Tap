@@ -104,6 +104,8 @@ CLASS zcl_tap DEFINITION
         snap_title   TYPE sy-title OPTIONAL
         tolerance    TYPE f DEFAULT cl_abap_unit_assert=>rtol_default.
 
+    " TAP Protocol
+
     METHODS plan
       IMPORTING
         count         TYPE i
@@ -344,6 +346,8 @@ CLASS zcl_tap DEFINITION
       RETURNING
         VALUE(result) TYPE REF TO zcl_tap.
 
+    " System Variables
+
     METHODS subrc
       IMPORTING
         exp           TYPE sy-subrc DEFAULT 0
@@ -371,6 +375,8 @@ CLASS zcl_tap DEFINITION
         msg           TYPE csequence OPTIONAL
       RETURNING
         VALUE(result) TYPE REF TO zcl_tap.
+
+    " Others
 
     METHODS throws
       IMPORTING
