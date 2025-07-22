@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/endpoint?url=https://shield.abappm.com/github/abapPM/ABAP-Tap/src/zcl_tap.clas.abap/c_version&label=Version&color=blue)
+![Version](https://img.shields.io/endpoint?url=https://shield.abappm.com/github/abapPM/ABAP-Tap/src/#apmg#cl_tap.clas.abap/version&label=Version&color=blue)
 
 [![License](https://img.shields.io/github/license/abapPM/ABAP-Tap?label=License&color=success)](https://github.com/abapPM/ABAP-Tap/blob/main/LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg?color=success)](https://github.com/abapPM/.github/blob/main/CODE_OF_CONDUCT.md)
@@ -10,13 +10,13 @@ This project is bringing the famous testing library [node-tap](https://node-tap.
 
 Stop writing long `cl_abap_unit_assert` statements. Use short `tap` methods that you can chain as well!
 
-The project supports creating and testing of snapshots as well.
+The project also supports creating and testing snapshots.
 
 NO WARRANTIES, [MIT License](https://github.com/abapPM/ABAP-Tap/blob/main/LICENSE)
 
 > [!IMPORTANT]
 > This project is still experimental. All features described below are implemented.
-> There are some test classes to validate the core features but it's missing full test coverage.
+> There are some test classes to validate the core features, but they lack full test coverage.
 > Any help to implement more tests is much appreciated.
 
 ## Usage
@@ -25,7 +25,7 @@ Here's how you use `tap` in your test classes:
 
 ```abap
 METHOD setup.
-  tap = NEW zcl_tap( ).
+  tap = NEW /apmg/cl_tap( ).
 ENDMETHOD.
 
 METHOD test.
@@ -42,7 +42,7 @@ You set the actual value using `act( )` or short `_( )`. At this time, the value
 
 ### Assertions (Expected)
 
-The following list include the available assertion methods:
+The following list includes the available assertion methods:
 
 Method                   | Description
 -------------------------|------------------------
@@ -67,7 +67,7 @@ Method                   | Description
 `return_code` or `rc`    | `cl_abap_unit_assert=>assert_return_code`
 `subrc`                  | `cl_abap_unit_assert=>assert_subrc` (default 0)
 `index`                  | `cl_abap_unit_assert=>assert_equals( act = sy-index )`
-`tadex`                  | `cl_abap_unit_assert=>assert_equals( act = sy-tabix )`
+`tabix`                  | `cl_abap_unit_assert=>assert_equals( act = sy-tabix )`
 `fdpos`                  | `cl_abap_unit_assert=>assert_equals( act = sy-fdpos )`
 `throws`                 | `cl_abap_unit_assert=>fail`
 `does_not_throw`         | If we get here, there was no exception. Therefore, pass the test
@@ -87,13 +87,13 @@ You can process test and record test results like [TAP Protocol](https://node-ta
 
 ```abap
 METHOD setup.
-  DATA(tap) = NEW zcl_tap( logging  = abap_true ).
+  DATA(tap) = NEW /apmg/cl_tap( logging  = abap_true ).
 ENDMETHOD.
 
 METHOD test.
   tap->plan( 1 ).
 
-  " your tests ...
+  "Your tests ...
 
   testplan = tap->end( ).  " TAP protocol output
 ENDMETHOD.
@@ -106,7 +106,7 @@ Additional methods: `bailout`, `passing`, `comment`, `pass`, `fail`, `skip`, `to
 To record snapshots, set `snapshot` to `abap_true`:
 
 ```abap
-DATA(tap) = NEW zcl_tap( snapshot = abap_true ).
+DATA(tap) = NEW /apmg/cl_tap( snapshot = abap_true ).
 ```
 
 In your test methods, you create snapshots as follows:
@@ -154,15 +154,15 @@ By default, the snapshots are stored in the "macro" include of the class.
 To match snapshots, set `snapshot` to `abap_false` (which is the default):
 
 ```abap
-DATA(tap) = NEW zcl_tap( snapshot = abap_false ).
+DATA(tap) = NEW /apmg/cl_tap( snapshot = abap_false ).
 ```
 
-If a test does not match the snapshot, an exception will be raised failing the test.
+If a test does not match the snapshot, an exception will be raised, failing the test.
 
 Alternatively, you can use a custom include for storing the snapshots:
 
 ```abap
-DATA(tap) = NEW zcl_tap(
+DATA(tap) = NEW /apmg/cl_tap(
   snapshot     = abap_true
   snap_include = 'ZSNAP_INCLUDE'
   snap_package = 'ZPROJECT'
@@ -174,7 +174,7 @@ DATA(tap) = NEW zcl_tap(
 You can set the default tolerance for comparison of floats (type `f`) in the constructor:
 
 ```abap
-DATA(tap) = NEW zcl_tap( tolerance = '1.E-14' ).
+DATA(tap) = NEW /apmg/cl_tap( tolerance = '1.E-14' ).
 ```
 
 ## Prerequisites
@@ -195,7 +195,7 @@ All contributions are welcome! Read our [Contribution Guidelines](https://github
 
 You can install the developer version of ABAP TAP using [abapGit](https://github.com/abapGit/abapGit) by creating a new online repository for `https://github.com/abapPM/ABAP-Tap`.
 
-Recommended SAP package: `$TAP`
+Default SAP package: `/APMG/TAP`
 
 ## About
 
@@ -203,4 +203,4 @@ Made with ❤ in Canada
 
 Copyright 2025 apm.to Inc. <https://apm.to>
 
-Follow [@marcf.be](https://bsky.app/profile/marcf.be) on Blueksy and [@marcfbe](https://linkedin.com/in/marcfbe) or LinkedIn
+Follow [@marcf.be](https://bsky.app/profile/marcf.be) on Bluesky and [@marcfbe](https://linkedin.com/in/marcfbe) or LinkedIn
