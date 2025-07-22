@@ -1,16 +1,18 @@
 {
-  "name": "xxx",
+  "name": "tap",
   "version": "1.0.0",
-  "description": "XXX",
+  "description": "TAP for ABAP",
   "type": "module",
   "keywords": [
     "abap",
     "apm",
-    "module"
+    "module",
+    "tap",
+    "testing"
   ],
   "homepage": "https://abappm.com",
   "bugs": {
-    "url": "https://github.com/abapPM/ABAP-XXX"
+    "url": "https://github.com/abapPM/ABAP-Tap"
   },
   "license": "MIT",
   "author": {
@@ -26,14 +28,11 @@
     }
   ],
   "repository": {
-    "url": "https://github.com/abapPM/ABAP-XXX"
+    "url": "https://github.com/abapPM/ABAP-Tap"
   },
   "funding": {
     "type": "github",
     "url": "https://github.com/sponsors/abapPM"
-  },
-  "dependencies": {
-    "error": "^1.0.0"
   },
   "engines": {
     "abap": ">=7.50",
