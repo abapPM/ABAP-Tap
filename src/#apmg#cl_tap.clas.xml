@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>ZCL_TAP</CLSNAME>
+    <CLSNAME>/APMG/CL_TAP</CLSNAME>
     <LANGU>E</LANGU>
     <DESCRIPT>Test Anything Protocol (TAP)</DESCRIPT>
     <STATE>1</STATE>

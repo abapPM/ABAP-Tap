@@ -18,11 +18,11 @@ CLASS ltcl_tap DEFINITION FOR TESTING RISK LEVEL HARMLESS
         xstr TYPE xstring VALUE '4265726E627264',
       END OF const.
 
-    DATA cut TYPE REF TO zcl_tap.
+    DATA cut TYPE REF TO /apmg/cl_tap.
 
     DATA:
       i          TYPE i,
-      i8         TYPE int8   ##NEEDED,
+      i8         TYPE int8 ##NEEDED,
       c          TYPE c LENGTH 3 ##NEEDED,
       n          TYPE n LENGTH 5 ##NEEDED,
       str        TYPE string,
