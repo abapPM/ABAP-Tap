@@ -180,7 +180,7 @@
       "aqqu": "^Z",
       "aqsg": "^Z",
       "auth": "^Z",
-      "clas": "^/APMG/C(L|X)\\_TAP",
+      "clas": "^/APMG/C(L|X)_TAP",
       "cmod": "^Z",
       "doma": "^Z",
       "dtel": "^Z",
@@ -192,7 +192,7 @@
       "idoc": "^Z",
       "ignoreNames": [],
       "ignorePatterns": [],
-      "intf": "^/APMG/IF\\_TAP",
+      "intf": "^/APMG/IF_TAP",
       "msag": "^Z",
       "patternKind": "required",
       "pinf": "^Z",
@@ -253,7 +253,7 @@
     "superclass_final": true,
     "superfluous_value": true,
     "sy_modification": {
-      "exclude": ["/apmg/cl_tap.clas.abap"]
+      "exclude": ["#apmg#cl_tap.clas.abap"]
     },
     "tabl_enhancement_category": true,
     "tables_declared_locally": true,
