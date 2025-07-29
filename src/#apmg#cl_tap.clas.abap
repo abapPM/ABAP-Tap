@@ -1,4 +1,4 @@
-CLASS zcl_tap DEFINITION
+CLASS /apmg/cl_tap DEFINITION
   PUBLIC
   CREATE PUBLIC.
 
@@ -14,21 +14,21 @@ CLASS zcl_tap DEFINITION
   PUBLIC SECTION.
 
     CONSTANTS:
-      version     TYPE string VALUE '1.0.0' ##NEEDED,
-      tap_version TYPE string VALUE 'TAP version 14' ##NO_TEXT.
+      c_version     TYPE string VALUE '1.0.0' ##NEEDED,
+      c_tap_version TYPE string VALUE 'TAP version 14' ##NO_TEXT.
 
     CONSTANTS:
-      BEGIN OF data_kind,
+      BEGIN OF c_data_kind,
         class      TYPE string VALUE 'CLASS',
         elementary TYPE string VALUE 'ELEMENTARY',
         interface  TYPE string VALUE 'INTERFACE',
         reference  TYPE string VALUE 'REFERENCE',
         structure  TYPE string VALUE 'STRUCTURE',
         table      TYPE string VALUE 'TABLE',
-      END OF data_kind.
+      END OF c_data_kind.
 
     CONSTANTS:
-      BEGIN OF data_type,
+      BEGIN OF c_data_type,
         any              TYPE string VALUE 'ANY',
         char             TYPE string VALUE 'CHAR', "c"
         class            TYPE string VALUE 'CLASS',
@@ -64,7 +64,7 @@ CLASS zcl_tap DEFINITION
         xstring          TYPE string VALUE 'XSTRING',
         bref             TYPE string VALUE 'BREF',
         enum             TYPE string VALUE 'ENUM',
-      END OF data_type.
+      END OF c_data_type.
 
     DATA testdoc TYPE string_table READ-ONLY.
 
@@ -84,7 +84,7 @@ CLASS zcl_tap DEFINITION
     DATA:
       BEGIN OF subtest READ-ONLY,
         description TYPE string,
-        tap         TYPE REF TO zcl_tap,
+        tap         TYPE REF TO /apmg/cl_tap,
         failed      TYPE abap_bool,
       END OF subtest.
 
@@ -111,17 +111,17 @@ CLASS zcl_tap DEFINITION
         count         TYPE i
         reason        TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS end
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS bailout
       IMPORTING
         reason        TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS passing
       RETURNING
@@ -131,7 +131,7 @@ CLASS zcl_tap DEFINITION
       IMPORTING
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS pass
       IMPORTING
@@ -140,25 +140,25 @@ CLASS zcl_tap DEFINITION
         todo          TYPE abap_bool OPTIONAL
           PREFERRED PARAMETER msg
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS fail
       IMPORTING
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS skip
       IMPORTING
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS todo
       IMPORTING
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     " Actual
 
@@ -166,13 +166,13 @@ CLASS zcl_tap DEFINITION
       IMPORTING
         data          TYPE any OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS _ " same as act
       IMPORTING
         data          TYPE any OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     " Assertions
 
@@ -184,167 +184,167 @@ CLASS zcl_tap DEFINITION
       IMPORTING
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS ok "same as true
       IMPORTING
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS false
       IMPORTING
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS not_ok "same as false
       IMPORTING
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS equals
       IMPORTING
         exp           TYPE any
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS eq "same as equals
       IMPORTING
         exp           TYPE any
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS differs
       IMPORTING
         exp           TYPE any
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS ne "same as differs
       IMPORTING
         exp           TYPE any
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS equals_float
       IMPORTING
         exp           TYPE any
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS eq_f "same as equals_float
       IMPORTING
         exp           TYPE any
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS cp
       IMPORTING
         exp           TYPE any
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS np
       IMPORTING
         exp           TYPE any
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS cs
       IMPORTING
         exp           TYPE any
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS ns
       IMPORTING
         exp           TYPE any
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS error
       IMPORTING
         msg           TYPE csequence
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS initial
       IMPORTING
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS not_initial
       IMPORTING
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS bound
       IMPORTING
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS not_bound
       IMPORTING
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS contains
       IMPORTING
         exp           TYPE any
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap ##SHADOW[CONTAINS].
+        VALUE(result) TYPE REF TO /apmg/cl_tap ##SHADOW[CONTAINS].
 
     METHODS not_contains
       IMPORTING
         exp           TYPE any
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS matches
       IMPORTING
         regex         TYPE any
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap ##SHADOW[MATCHES].
+        VALUE(result) TYPE REF TO /apmg/cl_tap ##SHADOW[MATCHES].
 
     METHODS re "same as matches
       IMPORTING
         regex         TYPE any
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS return_code
       IMPORTING
         exp           TYPE any
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS rc "same as return_code
       IMPORTING
         exp           TYPE any
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     " System Variables
 
@@ -353,28 +353,28 @@ CLASS zcl_tap DEFINITION
         exp           TYPE sy-subrc DEFAULT 0
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS index
       IMPORTING
         exp           TYPE sy-index
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS tabix
       IMPORTING
         exp           TYPE sy-tabix
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS fdpos
       IMPORTING
         exp           TYPE sy-fdpos
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     " Others
 
@@ -387,21 +387,21 @@ CLASS zcl_tap DEFINITION
       IMPORTING
         data          TYPE any
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap ##NEEDED.
+        VALUE(result) TYPE REF TO /apmg/cl_tap ##NEEDED.
 
     METHODS type
       IMPORTING
         exp           TYPE any
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS kind
       IMPORTING
         exp           TYPE any
         msg           TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     " Subtests
 
@@ -409,11 +409,11 @@ CLASS zcl_tap DEFINITION
       IMPORTING
         description   TYPE csequence OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS test_end
       RETURNING
-        VALUE(result) TYPE REF TO zcl_tap.
+        VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     " Snapshots
 
@@ -461,7 +461,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_tap IMPLEMENTATION.
+CLASS /apmg/cl_tap IMPLEMENTATION.
 
 
   METHOD abort.
@@ -535,7 +535,7 @@ CLASS zcl_tap IMPLEMENTATION.
       title   = snap_title ).
 
     " New TAP testdoc begins with version
-    APPEND tap_version TO testdoc.
+    APPEND c_tap_version TO testdoc.
   ENDMETHOD.
 
 
@@ -726,17 +726,17 @@ CLASS zcl_tap IMPLEMENTATION.
     ASSERT type_descr IS BOUND.
 
     CASE to_upper( exp ).
-      WHEN data_kind-class OR 'CLAS'.
+      WHEN c_data_kind-class OR 'CLAS'.
         DATA(exp_kind) = cl_abap_typedescr=>kind_class.
-      WHEN data_kind-elementary OR 'ELEM'.
+      WHEN c_data_kind-elementary OR 'ELEM'.
         exp_kind = cl_abap_typedescr=>kind_elem.
-      WHEN data_kind-interface OR 'INTF'.
+      WHEN c_data_kind-interface OR 'INTF'.
         exp_kind = cl_abap_typedescr=>kind_intf.
-      WHEN data_kind-reference OR 'REF'.
+      WHEN c_data_kind-reference OR 'REF'.
         exp_kind = cl_abap_typedescr=>kind_ref.
-      WHEN data_kind-structure OR 'STRU' OR 'STRUCT'.
+      WHEN c_data_kind-structure OR 'STRU' OR 'STRUCT'.
         exp_kind = cl_abap_typedescr=>kind_struct.
-      WHEN data_kind-table OR 'TAB' OR 'TABL'.
+      WHEN c_data_kind-table OR 'TAB' OR 'TABL'.
         exp_kind = cl_abap_typedescr=>kind_table.
       WHEN OTHERS.
         exp_kind = exp.
@@ -1015,88 +1015,88 @@ CLASS zcl_tap IMPLEMENTATION.
     ASSERT type_descr IS BOUND.
 
     CASE to_upper( exp ).
-      WHEN data_type-any.
+      WHEN c_data_type-any.
         DATA(exp_type) = cl_abap_typedescr=>typekind_any.
-      WHEN data_type-char OR 'C' OR 'CHA'.
+      WHEN c_data_type-char OR 'C' OR 'CHA'.
         exp_type = cl_abap_typedescr=>typekind_char.
-      WHEN data_type-class OR 'CLAS'.
+      WHEN c_data_type-class OR 'CLAS'.
         exp_type = cl_abap_typedescr=>typekind_class.
-      WHEN data_type-clike.
+      WHEN c_data_type-clike.
         "exp_type = cl_abap_typedescr=>typekind_clike
         exp_type = cl_abap_typedescr=>typekind_char && cl_abap_typedescr=>typekind_num
                 && cl_abap_typedescr=>typekind_string && cl_abap_typedescr=>typekind_date
                 && cl_abap_typedescr=>typekind_time.
-      WHEN data_type-csequence OR 'CSEQ'.
+      WHEN c_data_type-csequence OR 'CSEQ'.
         "exp_type = cl_abap_typedescr=>typekind_csequence
         exp_type = cl_abap_typedescr=>typekind_char && cl_abap_typedescr=>typekind_string.
-      WHEN data_type-data.
+      WHEN c_data_type-data.
         "exp_type = cl_abap_typedescr=>typekind_data
         exp_type = cl_abap_typedescr=>typekind_any.
-      WHEN data_type-date OR 'D' OR 'DAT' OR 'DATS' OR 'DATN'.
+      WHEN c_data_type-date OR 'D' OR 'DAT' OR 'DATS' OR 'DATN'.
         exp_type = cl_abap_typedescr=>typekind_date.
-      WHEN data_type-decfloat.
+      WHEN c_data_type-decfloat.
         "exp_type = cl_abap_typedescr=>typekind_decfloat
         exp_type = cl_abap_typedescr=>typekind_decfloat16 && cl_abap_typedescr=>typekind_decfloat34.
-      WHEN data_type-decfloat16 OR 'DEC16'.
+      WHEN c_data_type-decfloat16 OR 'DEC16'.
         exp_type = cl_abap_typedescr=>typekind_decfloat16.
-      WHEN data_type-decfloat34 OR 'DEC34'.
+      WHEN c_data_type-decfloat34 OR 'DEC34'.
         exp_type = cl_abap_typedescr=>typekind_decfloat34.
-      WHEN data_type-ref_to_data.
+      WHEN c_data_type-ref_to_data.
         exp_type = cl_abap_typedescr=>typekind_dref.
-      WHEN data_type-float OR 'F' OR 'FLTP'.
+      WHEN c_data_type-float OR 'F' OR 'FLTP'.
         exp_type = cl_abap_typedescr=>typekind_float.
-      WHEN data_type-hex OR 'X' OR 'RAW'.
+      WHEN c_data_type-hex OR 'X' OR 'RAW'.
         exp_type = cl_abap_typedescr=>typekind_hex.
-      WHEN data_type-int1 OR 'B' OR 'I1'.
+      WHEN c_data_type-int1 OR 'B' OR 'I1'.
         exp_type = cl_abap_typedescr=>typekind_int1.
-      WHEN data_type-int2 OR 'S' OR 'I2'.
+      WHEN c_data_type-int2 OR 'S' OR 'I2'.
         exp_type = cl_abap_typedescr=>typekind_int2.
-      WHEN data_type-int OR 'I' OR 'I4' OR 'INT4' OR 'INTEGER'.
+      WHEN c_data_type-int OR 'I' OR 'I4' OR 'INT4' OR 'INTEGER'.
         exp_type = cl_abap_typedescr=>typekind_int.
-      WHEN data_type-int8 OR 'I8'.
+      WHEN c_data_type-int8 OR 'I8'.
         exp_type = cl_abap_typedescr=>typekind_int8.
-      WHEN data_type-interface OR 'INTF'.
+      WHEN c_data_type-interface OR 'INTF'.
         exp_type = cl_abap_typedescr=>typekind_intf.
-      WHEN data_type-ref_to_interface.
+      WHEN c_data_type-ref_to_interface.
         exp_type = cl_abap_typedescr=>typekind_iref.
-      WHEN data_type-num OR 'N' OR 'NUMC'.
+      WHEN c_data_type-num OR 'N' OR 'NUMC'.
         exp_type = cl_abap_typedescr=>typekind_num.
-      WHEN data_type-numeric.
+      WHEN c_data_type-numeric.
         "exp_type = cl_abap_typedescr=>typekind_numeric
         exp_type = cl_abap_typedescr=>typekind_int1 && cl_abap_typedescr=>typekind_int2
                 && cl_abap_typedescr=>typekind_int && cl_abap_typedescr=>typekind_int8
                 && cl_abap_typedescr=>typekind_packed && cl_abap_typedescr=>typekind_float
                 && cl_abap_typedescr=>typekind_decfloat16 && cl_abap_typedescr=>typekind_decfloat34.
-      WHEN data_type-ref_to_object OR 'OBJ' OR 'OBJECT'.
+      WHEN c_data_type-ref_to_object OR 'OBJ' OR 'OBJECT'.
         exp_type = cl_abap_typedescr=>typekind_oref.
-      WHEN data_type-packed  OR 'P' OR 'DEC'.
+      WHEN c_data_type-packed  OR 'P' OR 'DEC'.
         exp_type = cl_abap_typedescr=>typekind_packed.
-      WHEN data_type-simple.
+      WHEN c_data_type-simple.
         exp_type = cl_abap_typedescr=>typekind_simple.
-      WHEN data_type-string OR 'STR' OR 'STRG'.
+      WHEN c_data_type-string OR 'STR' OR 'STRG'.
         exp_type = cl_abap_typedescr=>typekind_string.
       WHEN 'STRUC' OR 'STRUCT'.
         exp_type = cl_abap_typedescr=>typekind_struct1 && cl_abap_typedescr=>typekind_struct2.
-      WHEN data_type-struct1.
+      WHEN c_data_type-struct1.
         exp_type = cl_abap_typedescr=>typekind_struct1.
-      WHEN data_type-struct2.
+      WHEN c_data_type-struct2.
         exp_type = cl_abap_typedescr=>typekind_struct2.
-      WHEN data_type-table OR 'TAB' OR 'TABL'.
+      WHEN c_data_type-table OR 'TAB' OR 'TABL'.
         exp_type = cl_abap_typedescr=>typekind_table.
-      WHEN data_type-time OR 'T' OR 'TIMS' OR 'TIMN'.
+      WHEN c_data_type-time OR 'T' OR 'TIMS' OR 'TIMN'.
         exp_type = cl_abap_typedescr=>typekind_time.
-      WHEN data_type-utclong OR 'UTC'.
+      WHEN c_data_type-utclong OR 'UTC'.
         exp_type = cl_abap_typedescr=>typekind_utclong.
-      WHEN data_type-w OR 'LCHR'.
+      WHEN c_data_type-w OR 'LCHR'.
         exp_type = cl_abap_typedescr=>typekind_w.
-      WHEN data_type-xsequence OR 'XSEQ'.
+      WHEN c_data_type-xsequence OR 'XSEQ'.
         "exp_type = cl_abap_typedescr=>typekind_xsequence
         exp_type = cl_abap_typedescr=>typekind_hex && cl_abap_typedescr=>typekind_xstring.
-      WHEN data_type-xstring OR 'XSTR' OR 'RSTR'.
+      WHEN c_data_type-xstring OR 'XSTR' OR 'RSTR'.
         exp_type = cl_abap_typedescr=>typekind_xstring.
-      WHEN data_type-bref.
+      WHEN c_data_type-bref.
         exp_type = cl_abap_typedescr=>typekind_bref.
-      WHEN data_type-enum.
+      WHEN c_data_type-enum.
         exp_type = cl_abap_typedescr=>typekind_enum.
       WHEN OTHERS.
         exp_type = exp.
