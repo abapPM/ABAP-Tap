@@ -15,9 +15,9 @@ The package also supports creating and testing snapshots.
 NO WARRANTIES, [MIT License](https://github.com/abapPM/ABAP-Tap/blob/main/LICENSE)
 
 > [!IMPORTANT]
-> This project is still experimental. All features described below are implemented.
-> There are some test classes to validate the core features, but they lack full test coverage.
-> Any help to implement more tests is much appreciated.
+> All features described below are implemented.
+> The test class validates the core features, but is lacking full test coverage.
+> Any help in implementing additional tests is greatly appreciated.
 
 ## Usage
 
