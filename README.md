@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/endpoint?url=https://shield.abappm.com/github/abapPM/ABAP-Tap/src/#apmg#cl_tap.clas.abap/c_version&label=Version&color=blue)
+![Version](https://img.shields.io/endpoint?url=https://shield.abappm.com/github/abapPM/ABAP-Tap/src/%2523apmg%2523cl_tap.clas.abap/c_version&label=Version&color=blue)
 
 [![License](https://img.shields.io/github/license/abapPM/ABAP-Tap?label=License&color=success)](https://github.com/abapPM/ABAP-Tap/blob/main/LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg?color=success)](https://github.com/abapPM/.github/blob/main/CODE_OF_CONDUCT.md)
@@ -6,11 +6,11 @@
 
 # TAP for ABAP
 
-This project is bringing the famous testing library [node-tap](https://node-tap.org/) to ABAP.
+This package brings the famous [node-tap](https://node-tap.org/) testing library to ABAP.
 
 Stop writing long `cl_abap_unit_assert` statements. Use short `tap` methods that you can chain as well!
 
-The project also supports creating and testing snapshots.
+The package also supports creating and testing snapshots.
 
 NO WARRANTIES, [MIT License](https://github.com/abapPM/ABAP-Tap/blob/main/LICENSE)
 
@@ -46,7 +46,7 @@ The following list includes the available assertion methods:
 
 Method                   | Description
 -------------------------|------------------------
-`abort        `          | `cl_abap_unit_assert=>abort`
+`abort`                  | `cl_abap_unit_assert=>abort`
 `initial`                | `cl_abap_unit_assert=>assert_initial`
 `not_initial`            | `cl_abap_unit_assert=>assert_not_initial`
 `bound`                  | `cl_abap_unit_assert=>assert_bound`
@@ -55,7 +55,7 @@ Method                   | Description
 `false` or `not_ok`      | `cl_abap_unit_assert=>assert_false`
 `equals` or `eq`         | `cl_abap_unit_assert=>assert_equals`
 `equals_float` or `eq_f` | `cl_abap_unit_assert=>assert_equals_float`
-`differs` or `ne   `     | `cl_abap_unit_assert=>assert_differs` (different types passes the test!)
+`differs` or `ne`        | `cl_abap_unit_assert=>assert_differs` (different types passes the test!)
 `cp`                     | `cl_abap_unit_assert=>assert_char_cp`
 `np`                     | `cl_abap_unit_assert=>assert_char_np`
 `cs`                     | `cl_abap_unit_assert=>assert_true( xsdbool( act CS exp ) )`
