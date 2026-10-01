@@ -234,42 +234,42 @@ CLASS /apmg/cl_tap DEFINITION
 
     METHODS equals_float
       IMPORTING
-        exp           TYPE any
+        exp           TYPE numeric
         msg           TYPE csequence OPTIONAL
       RETURNING
         VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS eq_f "same as equals_float
       IMPORTING
-        exp           TYPE any
+        exp           TYPE numeric
         msg           TYPE csequence OPTIONAL
       RETURNING
         VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS cp
       IMPORTING
-        exp           TYPE any
+        exp           TYPE csequence
         msg           TYPE csequence OPTIONAL
       RETURNING
         VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS np
       IMPORTING
-        exp           TYPE any
+        exp           TYPE csequence
         msg           TYPE csequence OPTIONAL
       RETURNING
         VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS cs
       IMPORTING
-        exp           TYPE any
+        exp           TYPE csequence
         msg           TYPE csequence OPTIONAL
       RETURNING
         VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS ns
       IMPORTING
-        exp           TYPE any
+        exp           TYPE csequence
         msg           TYPE csequence OPTIONAL
       RETURNING
         VALUE(result) TYPE REF TO /apmg/cl_tap.
@@ -320,28 +320,28 @@ CLASS /apmg/cl_tap DEFINITION
 
     METHODS matches
       IMPORTING
-        regex         TYPE any
+        regex         TYPE csequence
         msg           TYPE csequence OPTIONAL
       RETURNING
         VALUE(result) TYPE REF TO /apmg/cl_tap ##SHADOW[MATCHES].
 
     METHODS re "same as matches
       IMPORTING
-        regex         TYPE any
+        regex         TYPE csequence
         msg           TYPE csequence OPTIONAL
       RETURNING
         VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS return_code
       IMPORTING
-        exp           TYPE any
+        exp           TYPE numeric
         msg           TYPE csequence OPTIONAL
       RETURNING
         VALUE(result) TYPE REF TO /apmg/cl_tap.
 
     METHODS rc "same as return_code
       IMPORTING
-        exp           TYPE any
+        exp           TYPE numeric
         msg           TYPE csequence OPTIONAL
       RETURNING
         VALUE(result) TYPE REF TO /apmg/cl_tap.
@@ -785,7 +785,7 @@ CLASS /apmg/cl_tap IMPLEMENTATION.
     cl_abap_unit_assert=>assert_table_not_contains(
       table = <act>
       line  = exp
-      msg  = msg ).
+      msg   = msg ).
 
     result = me.
   ENDMETHOD.
