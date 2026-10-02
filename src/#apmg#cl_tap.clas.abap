@@ -8,7 +8,7 @@ CLASS /apmg/cl_tap DEFINITION
 * Copyright 2024 apm.to Inc. <https://apm.to>
 * SPDX-License-Identifier: MIT
 ************************************************************************
-* Based on * https://testanything.org/tap-version-14-specification.html
+* Based on https://testanything.org/tap-version-14-specification.html
 ************************************************************************
 
   PUBLIC SECTION.
